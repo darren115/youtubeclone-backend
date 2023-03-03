@@ -50,7 +50,7 @@ public class VideoService {
 		savedVideo.setDescription(videoDto.getDescription());
 		savedVideo.setTags(videoDto.getTags());
 		savedVideo.setThumbnailUrl(videoDto.getThumbnailUrl());
-		savedVideo.setVideostatus(videoDto.getVideoStatus());
+		savedVideo.setVideoStatus(videoDto.getVideoStatus());
 		
 		videoRepository.save(savedVideo);
 		
@@ -60,6 +60,21 @@ public class VideoService {
 	private Video getVideoById(String videoId) {
 		return videoRepository.findById(videoId)
 				.orElseThrow(()-> new IllegalArgumentException("Cannot find video by id - " + videoId));
+	}
+
+	public VideoDto getVideoDetails(String videoId) {
+		Video savedVideo = getVideoById(videoId);
+		
+		VideoDto videoDto = new VideoDto();
+		videoDto.setId(savedVideo.getId());
+		videoDto.setTitle(savedVideo.getTitle());
+		videoDto.setDescription(savedVideo.getDescription());
+		videoDto.setTags(savedVideo.getTags());
+		videoDto.setThumbnailUrl(savedVideo.getThumbnailUrl());
+		videoDto.setVideoUrl(savedVideo.getVideoUrl());
+		videoDto.setVideoStatus(savedVideo.getVideoStatus());
+		
+		return videoDto;
 	}
 
 }

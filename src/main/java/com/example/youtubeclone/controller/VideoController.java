@@ -1,6 +1,8 @@
 package com.example.youtubeclone.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +43,12 @@ public class VideoController {
 	@ResponseStatus(HttpStatus.OK)
 	public VideoDto editVideoMetaData(@RequestBody VideoDto videoDto){
 		return videoService.editVideo(videoDto);
+	}
+	
+	@GetMapping("/{videoId}")
+	@ResponseStatus(HttpStatus.OK)
+	public VideoDto getVideoDetails(@PathVariable String videoId) {
+		return videoService.getVideoDetails(videoId);
 	}
 
 }
