@@ -1,11 +1,12 @@
 package com.example.youtubeclone.service;
 
+import java.util.Set;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.example.youtubeclone.model.User;
-import com.example.youtubeclone.model.Video;
 import com.example.youtubeclone.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -73,8 +74,7 @@ public class UserService {
 		User currentUser = getCurrentUser();
 		currentUser.addToSubscribedToUsers(userId);
 		
-		User user = userRepository.findById(userId)
-		.orElseThrow(()-> new IllegalArgumentException("Cannot find user with userId " + userId));
+		User user = getUserById(userId);
 		
 		user.addToSubscribers(currentUser.getId());
 		
@@ -86,13 +86,23 @@ public class UserService {
 		User currentUser = getCurrentUser();
 		currentUser.removeFromSubscribedToUsers(userId);
 		
-		User user = userRepository.findById(userId)
-		.orElseThrow(()-> new IllegalArgumentException("Cannot find user with userId " + userId));
+		User user = getUserById(userId);
 		
 		user.removeFromSubscribers(currentUser.getId());
 		
 		userRepository.save(currentUser);
 		userRepository.save(user);
+	}
+	
+	public User getUserById(String userId) {
+		return userRepository.findById(userId)
+				.orElseThrow(()-> new IllegalArgumentException("Cannot find user with userId " + userId));
+	}
+
+	public Set<String> getUserHistory(String userId) {
+		User user = getUserById(userId);
+		return user.getVideoHistory();
+		
 	}
 
 }

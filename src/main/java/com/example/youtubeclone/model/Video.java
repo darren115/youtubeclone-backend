@@ -2,6 +2,8 @@ package com.example.youtubeclone.model;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.data.annotation.Id;
@@ -24,12 +26,12 @@ public class Video {
 	private String userId;
 	private AtomicInteger likes = new AtomicInteger(0);;
 	private AtomicInteger dislikes = new AtomicInteger(0);
-	private Set<String> tags;
+	private Set<String> tags = ConcurrentHashMap.newKeySet();
 	private String videoUrl;
 	private VideoStatus VideoStatus;
 	private AtomicInteger viewCount = new AtomicInteger(0);
 	private String thumbnailUrl;
-	private List<Comment> commentList;
+	private List<Comment> commentList = new CopyOnWriteArrayList<>();
 	
 	public void incrementLikes() {
 		likes.incrementAndGet();
@@ -49,6 +51,11 @@ public class Video {
 
 	public void incrementViewCount() {
 		viewCount.incrementAndGet();
+		
+	}
+
+	public void addComment(Comment comment) {
+		commentList.add(comment);
 		
 	}
 

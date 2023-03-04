@@ -1,5 +1,7 @@
 package com.example.youtubeclone.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.youtubeclone.dto.CommentDto;
 import com.example.youtubeclone.dto.UploadVideoResponse;
 import com.example.youtubeclone.dto.VideoDto;
 import com.example.youtubeclone.service.VideoService;
@@ -62,5 +65,24 @@ public class VideoController {
 	public VideoDto dislikeVideo(@PathVariable String videoId) {
 		return videoService.dislikeVideo(videoId);
 	}
+	
+	@PostMapping("/{videoId}/comment")
+	@ResponseStatus(HttpStatus.OK)
+	public void addComment(@PathVariable String videoId, @RequestBody CommentDto commentDto) {
+		videoService.addComment(videoId, commentDto);
+	}
+	
+	@GetMapping("/{videoId}/comment")
+	@ResponseStatus(HttpStatus.OK)
+	public List<CommentDto> getComments(@PathVariable String videoId) {
+		return videoService.getComments(videoId);
+	}
+	
+	@GetMapping
+	@ResponseStatus(HttpStatus.OK)
+	public List<VideoDto> getAllVideos(){
+		return videoService.getAllVideos();
+	}
+	
 
 }
