@@ -67,16 +67,15 @@ public class VideoService {
 	public VideoDto getVideoDetails(String videoId) {
 		Video savedVideo = getVideoById(videoId);
 		
-		VideoDto videoDto = new VideoDto();
-		videoDto.setId(savedVideo.getId());
-		videoDto.setTitle(savedVideo.getTitle());
-		videoDto.setDescription(savedVideo.getDescription());
-		videoDto.setTags(savedVideo.getTags());
-		videoDto.setThumbnailUrl(savedVideo.getThumbnailUrl());
-		videoDto.setVideoUrl(savedVideo.getVideoUrl());
-		videoDto.setVideoStatus(savedVideo.getVideoStatus());
-		
-		return videoDto;
+		increaseVideoCount(savedVideo);
+		userService.addVideoToHistory(videoId);
+
+		return mapToVideoDto(savedVideo);
+	}
+	
+	private void increaseVideoCount(Video savedVideo) {
+		savedVideo.incrementViewCount();
+		videoRepository.save(savedVideo);
 	}
 
 	public VideoDto likeVideo(String videoId) {
@@ -109,18 +108,8 @@ public class VideoService {
 		
 		videoRepository.save(savedVideo);
 		
-		VideoDto videoDto = new VideoDto();
-		videoDto.setId(savedVideo.getId());
-		videoDto.setTitle(savedVideo.getTitle());
-		videoDto.setDescription(savedVideo.getDescription());
-		videoDto.setTags(savedVideo.getTags());
-		videoDto.setThumbnailUrl(savedVideo.getThumbnailUrl());
-		videoDto.setVideoUrl(savedVideo.getVideoUrl());
-		videoDto.setVideoStatus(savedVideo.getVideoStatus());
-		videoDto.setLikeCount(savedVideo.getLikes().get());
-		videoDto.setDislikeCount(savedVideo.getDislikes().get());
-		
-		return videoDto;
+
+		return mapToVideoDto(savedVideo);
 	}
 	
 	public VideoDto dislikeVideo(String videoId) {
@@ -140,17 +129,22 @@ public class VideoService {
 		}		
 		
 		videoRepository.save(savedVideo);
+
 		
+		return mapToVideoDto(savedVideo);
+	}
+	
+	private VideoDto mapToVideoDto(Video videoById) {
 		VideoDto videoDto = new VideoDto();
-		videoDto.setId(savedVideo.getId());
-		videoDto.setTitle(savedVideo.getTitle());
-		videoDto.setDescription(savedVideo.getDescription());
-		videoDto.setTags(savedVideo.getTags());
-		videoDto.setThumbnailUrl(savedVideo.getThumbnailUrl());
-		videoDto.setVideoUrl(savedVideo.getVideoUrl());
-		videoDto.setVideoStatus(savedVideo.getVideoStatus());
-		videoDto.setLikeCount(savedVideo.getLikes().get());
-		videoDto.setDislikeCount(savedVideo.getDislikes().get());
+		videoDto.setId(videoById.getId());
+		videoDto.setTitle(videoById.getTitle());
+		videoDto.setDescription(videoById.getDescription());
+		videoDto.setTags(videoById.getTags());
+		videoDto.setThumbnailUrl(videoById.getThumbnailUrl());
+		videoDto.setVideoUrl(videoById.getVideoUrl());
+		videoDto.setVideoStatus(videoById.getVideoStatus());
+		videoDto.setLikeCount(videoById.getLikes().get());
+		videoDto.setDislikeCount(videoById.getDislikes().get());
 		
 		return videoDto;
 	}

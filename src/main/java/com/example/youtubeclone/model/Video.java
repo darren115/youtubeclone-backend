@@ -27,7 +27,7 @@ public class Video {
 	private Set<String> tags;
 	private String videoUrl;
 	private VideoStatus VideoStatus;
-	private Integer viewCount;
+	private AtomicInteger viewCount = new AtomicInteger(0);
 	private String thumbnailUrl;
 	private List<Comment> commentList;
 	
@@ -45,6 +45,11 @@ public class Video {
 	
 	public void decrementDislikes() {
 		dislikes.decrementAndGet();
+	}
+
+	public void incrementViewCount() {
+		viewCount.incrementAndGet();
+		
 	}
 
 }

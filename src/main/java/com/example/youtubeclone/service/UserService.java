@@ -5,6 +5,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.example.youtubeclone.model.User;
+import com.example.youtubeclone.model.Video;
 import com.example.youtubeclone.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,38 @@ public class UserService {
 		currentUser.removeFromDislikedVideos(videoId);
 		
 		userRepository.save(currentUser);
+	}
+
+	public void addVideoToHistory(String id) {
+		User currentUser = getCurrentUser();
+		currentUser.addToVideoHistory(id);
+		userRepository.save(currentUser);
+	}
+
+	public void subscribeUser(String userId) {
+		User currentUser = getCurrentUser();
+		currentUser.addToSubscribedToUsers(userId);
+		
+		User user = userRepository.findById(userId)
+		.orElseThrow(()-> new IllegalArgumentException("Cannot find user with userId " + userId));
+		
+		user.addToSubscribers(currentUser.getId());
+		
+		userRepository.save(currentUser);
+		userRepository.save(user);
+	}
+	
+	public void unsubscribeUser(String userId) {
+		User currentUser = getCurrentUser();
+		currentUser.removeFromSubscribedToUsers(userId);
+		
+		User user = userRepository.findById(userId)
+		.orElseThrow(()-> new IllegalArgumentException("Cannot find user with userId " + userId));
+		
+		user.removeFromSubscribers(currentUser.getId());
+		
+		userRepository.save(currentUser);
+		userRepository.save(user);
 	}
 
 }
