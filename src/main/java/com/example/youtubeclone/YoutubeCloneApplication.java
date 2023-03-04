@@ -1,5 +1,6 @@
 package com.example.youtubeclone;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +12,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 @SpringBootApplication
 public class YoutubeCloneApplication {
 
+	
 	public static void main(String[] args) {
 		SpringApplication.run(YoutubeCloneApplication.class, args);
+
 	}
 	
 	@Bean

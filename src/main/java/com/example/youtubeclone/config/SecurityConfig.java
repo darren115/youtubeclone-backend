@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,10 +31,10 @@ public class SecurityConfig{
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-
-		http.csrf().disable().authorizeHttpRequests().requestMatchers("/api/vvideos/**").permitAll()
+		http.csrf().disable().authorizeHttpRequests()
 				.anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and().oauth2ResourceServer().jwt();
+				.and().cors(Customizer.withDefaults())
+				.oauth2ResourceServer().jwt();
 //	    http.csrf().disable()
 //        .authorizeHttpRequests().requestMatchers("/api/v*/registration/**").permitAll()
 //        .anyRequest().authenticated().and().formLogin();
@@ -54,6 +55,7 @@ public class SecurityConfig{
 	
 	@Bean
 	JwtDecoder jwtDecoder() {
+		
 		NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
 		
 		OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
