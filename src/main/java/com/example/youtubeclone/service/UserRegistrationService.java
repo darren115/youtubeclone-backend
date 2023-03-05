@@ -1,13 +1,12 @@
 package com.example.youtubeclone.service;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Version;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Optional;
 
-import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,7 @@ public class UserRegistrationService {
 	
 	private final UserRepository userRepository;
 	
-	public void registerUser(String tokenValue) {
+	public String registerUser(String tokenValue) {
 		HttpRequest httpRequest = HttpRequest.newBuilder().GET()
 		.uri(URI.create(userInfoEndpoint))
 		.setHeader("Authorization", String.format("Bearer %s", tokenValue))
@@ -44,6 +43,12 @@ public class UserRegistrationService {
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			UserInfoDTO userInfoDTO = objectMapper.readValue(body, UserInfoDTO.class);
 			
+			Optional<User> userOp = userRepository.findBySub(userInfoDTO.getSub());
+			
+			if(userOp.isPresent()) {
+				return userOp.get().getId();
+			}
+			
 			User user = new User();
 			user.setFirstName(userInfoDTO.getGivenName());
 			user.setLastName(userInfoDTO.getFamilyName());
@@ -51,7 +56,8 @@ public class UserRegistrationService {
 			user.setEmailAddress(userInfoDTO.getEmail());
 			user.setSub(userInfoDTO.getSub());
 			
-			userRepository.save(user);
+			return userRepository.save(user).getId();
+			
 			
 		} catch (Exception e) {
 			throw new RuntimeException("Exception occurred while registering user", e);

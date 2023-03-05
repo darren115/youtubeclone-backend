@@ -24,7 +24,7 @@ public class Video {
 	private String title;
 	private String description;
 	private String userId;
-	private AtomicInteger likes = new AtomicInteger(0);;
+	private AtomicInteger likes = new AtomicInteger(0);
 	private AtomicInteger dislikes = new AtomicInteger(0);
 	private Set<String> tags = ConcurrentHashMap.newKeySet();
 	private String videoUrl;
