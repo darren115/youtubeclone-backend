@@ -1,5 +1,7 @@
 package com.example.youtubeclone.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -10,7 +12,6 @@ import com.example.youtubeclone.dto.UploadVideoResponse;
 import com.example.youtubeclone.dto.VideoDto;
 import com.example.youtubeclone.model.Comment;
 import com.example.youtubeclone.model.Video;
-import com.example.youtubeclone.repository.UserRepository;
 import com.example.youtubeclone.repository.VideoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -150,6 +151,17 @@ public class VideoService {
 		videoDto.setLikeCount(videoById.getLikes().get());
 		videoDto.setDislikeCount(videoById.getDislikes().get());
 		videoDto.setViewCount(videoById.getViewCount().get());
+		//videoDto.setUploadDate(videoById.getUploadDate().toString());
+		
+		//convert uploaded date to time difference in minutes between then and now
+
+		Duration diff = Duration.between(LocalDateTime.now(), videoById.getUploadDate());
+		videoDto.setUploadDate(diff.toMinutes());
+		
+		System.out.println();
+		System.out.println("--------------------------------");
+		System.out.println(videoById.getUploadDate().toString());
+		System.out.println(String.valueOf(diff.toMinutes()));
 		
 		return videoDto;
 	}
@@ -168,10 +180,10 @@ public class VideoService {
 
 	public List<CommentDto> getComments(String videoId) {
 		Video video = getVideoById(videoId);
-		return video.getCommentList().stream().map(this::maptToCommentDto).toList();
+		return video.getCommentList().stream().map(this::mapToCommentDto).toList();
 	}
 
-	private CommentDto maptToCommentDto(Comment comment) {
+	private CommentDto mapToCommentDto(Comment comment) {
 		CommentDto commentDto = new CommentDto();
 		commentDto.setCommentText(comment.getText());
 		commentDto.setAuthorId(comment.getAuthorId());
