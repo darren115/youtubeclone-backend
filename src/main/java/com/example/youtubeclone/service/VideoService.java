@@ -58,6 +58,7 @@ public class VideoService {
 		savedVideo.setTags(videoDto.getTags());
 		savedVideo.setThumbnailUrl(videoDto.getThumbnailUrl());
 		savedVideo.setVideoStatus(videoDto.getVideoStatus());
+		savedVideo.setUserId(videoDto.getUserId());
 		
 		videoRepository.save(savedVideo);
 		
@@ -151,6 +152,7 @@ public class VideoService {
 		videoDto.setLikeCount(videoById.getLikes().get());
 		videoDto.setDislikeCount(videoById.getDislikes().get());
 		videoDto.setViewCount(videoById.getViewCount().get());
+		videoDto.setUserId(videoById.getUserId());
 
 		//convert uploaded date to time difference in minutes between then and now
 		Duration diff = Duration.between(LocalDateTime.now(), videoById.getUploadDate());

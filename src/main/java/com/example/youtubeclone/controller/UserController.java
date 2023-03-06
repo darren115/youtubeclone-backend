@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.youtubeclone.dto.UserInfoDTO;
 import com.example.youtubeclone.service.UserRegistrationService;
 import com.example.youtubeclone.service.UserService;
 
@@ -32,6 +33,11 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public String register(Authentication authentication) {
 		Jwt jwt = (Jwt)authentication.getPrincipal();
+		
+		System.out.println();
+		System.out.println();
+		System.out.println("-----------------");
+		System.out.println(jwt);
 		
 		return userRegistrationService.registerUser(jwt.getTokenValue());
 	}
@@ -56,6 +62,12 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public Set<String> getUserHistory(@PathVariable String userId){
 		return userService.getUserHistory(userId);
+	}
+	
+	@GetMapping("/{userId}")
+	@ResponseStatus(HttpStatus.OK)
+	public UserInfoDTO getUser(@PathVariable String userId){
+		return userService.getUser(userId);
 	}
 
 }

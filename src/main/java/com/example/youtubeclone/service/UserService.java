@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import com.example.youtubeclone.dto.UserInfoDTO;
 import com.example.youtubeclone.model.User;
 import com.example.youtubeclone.repository.UserRepository;
 
@@ -92,6 +93,18 @@ public class UserService {
 		
 		userRepository.save(currentUser);
 		userRepository.save(user);
+	}
+	
+	public UserInfoDTO getUser(String userId) {
+		User user = getUserById(userId);
+		
+		UserInfoDTO dto = new UserInfoDTO();
+		dto.setId(userId);
+		dto.setName(user.getFirstName());
+		dto.setEmail(user.getEmailAddress());
+		
+		
+		return dto;
 	}
 	
 	public User getUserById(String userId) {
