@@ -102,6 +102,7 @@ public class UserService {
 		dto.setId(userId);
 		dto.setName(user.getFirstName());
 		dto.setEmail(user.getEmailAddress());
+		dto.setSubscribers(user.getSubscribers().size());
 		
 		
 		return dto;
