@@ -151,17 +151,11 @@ public class VideoService {
 		videoDto.setLikeCount(videoById.getLikes().get());
 		videoDto.setDislikeCount(videoById.getDislikes().get());
 		videoDto.setViewCount(videoById.getViewCount().get());
-		//videoDto.setUploadDate(videoById.getUploadDate().toString());
-		
-		//convert uploaded date to time difference in minutes between then and now
 
+		//convert uploaded date to time difference in minutes between then and now
 		Duration diff = Duration.between(LocalDateTime.now(), videoById.getUploadDate());
 		videoDto.setUploadDate(diff.toMinutes());
-		
-		System.out.println();
-		System.out.println("--------------------------------");
-		System.out.println(videoById.getUploadDate().toString());
-		System.out.println(String.valueOf(diff.toMinutes()));
+
 		
 		return videoDto;
 	}
@@ -187,6 +181,10 @@ public class VideoService {
 		CommentDto commentDto = new CommentDto();
 		commentDto.setCommentText(comment.getText());
 		commentDto.setAuthorId(comment.getAuthorId());
+		commentDto.setLikeCount(comment.getLikeCount());
+		commentDto.setDislikeCount(comment.getDislikeCount());
+		Duration diff = Duration.between(LocalDateTime.now(), comment.getUploadDate());
+		commentDto.setUploadDifference(diff.toMinutes());
 		return commentDto;
 	}
 

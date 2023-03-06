@@ -13,6 +13,8 @@ public class CommentDto {
 	
 	private String commentText;
 	private String authorId;
-	
+	private Integer likeCount;
+	private Integer dislikeCount;
+	private Long uploadDifference;
 
 }

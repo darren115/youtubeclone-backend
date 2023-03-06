@@ -1,5 +1,7 @@
 package com.example.youtubeclone.model;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
@@ -17,4 +19,5 @@ public class Comment {
 	private String authorId;
 	private Integer likeCount;
 	private Integer dislikeCount;
+	private LocalDateTime uploadDate = LocalDateTime.now();
 }
